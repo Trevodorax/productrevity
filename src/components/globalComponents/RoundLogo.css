@@ -1,0 +1,16 @@
+.roundLogo {
+  height: 50px;
+  width: 50px;
+
+  background-color: #371B58;
+
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 70%;
+
+  border-radius: 100%;
+  -webkit-border-radius: 100%;
+  -moz-border-radius: 100%;
+  -ms-border-radius: 100%;
+  -o-border-radius: 100%;
+}

@@ -1,10 +1,10 @@
 import "./Body.css";
 
-function Body() {
+export function Body() {
   return(
-    <body>
+    <div>
       Wowd
-    </body>
+    </div>
   );
 }
 

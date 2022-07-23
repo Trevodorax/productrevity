@@ -1,11 +1,13 @@
 import "./Header.css";
+import { RoundLogo } from "./globalComponents/RoundLogo";
+import siteLogo from "../assets/images/siteLogo.svg"
 
-function Header() {
+export function Header() {
   return (
     <header>
-      Header
+      <RoundLogo
+        logoImage={siteLogo}
+      />
     </header>
   );
 }
-
-export default Header;
