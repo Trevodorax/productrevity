@@ -1,0 +1,23 @@
+header {
+  height: 100px;
+  width: 100%;
+  display: flex;
+
+  padding: 16px;
+  justify-content: space-between;
+  align-items: center;
+
+  background-color: #A69ABA;
+}
+
+.roundLogo {
+  flex-shrink: 0;
+}
+
+header > h1 {
+  flex-shrink: 3;
+}
+
+h1 {
+  font-size: 1.4rem;
+}

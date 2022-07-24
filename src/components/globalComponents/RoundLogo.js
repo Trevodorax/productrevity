@@ -1,16 +1,20 @@
 import "./RoundLogo.css"
 
 export function RoundLogo(props) {
-  console.log(props.logoImage);
 
   const logoStyle = {
-    backgroundImage : "url(" + props.logoImage + ")"
+    backgroundImage : "url(" + props.logoImage + ")",
+    height: props.height,
+    width: props.width
   }
 
   return (
-    <div
+    <a
       className="roundLogo"
-      style = {logoStyle}
-    />
+      style={logoStyle}
+      href={props.link}
+    >
+
+    </a>
   );
 }
