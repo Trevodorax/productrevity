@@ -1,4 +1,4 @@
-h2 {
+.headerInfo h2 {
   width: fit-content;
   margin: 0;
   padding: 8px 48px;
@@ -19,7 +19,7 @@ h2 {
   align-items: center;
 }
 
-a {
+.headerInfo a {
   height: 32px;
   width: 80px;
 
@@ -29,7 +29,7 @@ a {
   background-position: center top;
 }
 
-img {
+.headerInfo img {
   display: block;
   margin: 0 auto;
 }

@@ -10,6 +10,8 @@ export function RoundLogo(props) {
 
   return (
     <a
+      onClick={props.onClick}
+
       className="roundLogo"
       style={logoStyle}
       href={props.link}

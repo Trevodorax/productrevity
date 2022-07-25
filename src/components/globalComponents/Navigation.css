@@ -1,0 +1,33 @@
+nav.fullPage {
+  position: absolute;
+  top: 100px;
+  width: 400px;
+  transition:1s;
+  -webkit-transition:1s;
+  -moz-transition:1s;
+  -ms-transition:1s;
+  -o-transition:1s;
+}
+
+nav.fullPage > * {
+  display: block;
+  height: 100px;
+
+  padding: 32px;
+
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 1.2rem;
+  text-align: center;
+
+  background-color: #A69ABA;
+  transition: 1s;
+  -webkit-transition: 1s;
+  -moz-transition: 1s;
+  -ms-transition: 1s;
+  -o-transition: 1s;
+}
+
+nav.fullPage > *:hover {
+  background-color: #5B4B8A;
+}
