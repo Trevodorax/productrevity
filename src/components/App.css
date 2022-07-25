@@ -3,14 +3,18 @@
 
 
 /* ===== GENERAL SETTINGS ===== */
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
 
   font-family: 'Montserrat', sans-serif;
 }
 
-* {
-  box-sizing: border-box;
+main {
+  min-height: 70vh;
 }
 
 

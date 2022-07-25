@@ -1,7 +1,7 @@
 import "./App.css";
 
-import { Header } from "./pageTop/Header";
-import { Footer } from "./Footer";
+import { Header } from "./stickyElements/Header";
+import { Footer } from "./stickyElements/Footer";
 import { Home } from "../routes/Home";
 import { Lists } from "../routes/Lists";
 import { List } from "../routes/List";

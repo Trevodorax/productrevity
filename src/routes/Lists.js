@@ -1,5 +1,5 @@
 export function Lists(props) {
   return (
-    <h1>Lists</h1>
+    <main>Lists</main>
   );
 }
