@@ -15,7 +15,7 @@ header {
 }
 
 header > h1 {
-  flex-shrink: 3;
+  color: #ffffff;
 }
 
 h1 {
