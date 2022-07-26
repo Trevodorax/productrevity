@@ -2,7 +2,7 @@ import "./App.css";
 
 import { Header } from "./stickyElements/Header";
 import { Footer } from "./stickyElements/Footer";
-import { Home } from "../routes/Home";
+import { Home } from "../routes/HomeRoute/Home";
 import { Lists } from "../routes/Lists";
 import { List } from "../routes/List";
 import { Focus } from "../routes/Focus";

@@ -20,13 +20,17 @@
 }
 
 .headerInfo a {
-  height: 32px;
   width: 80px;
-
   background-image: url("../../assets/images/trapezeBackground.svg");
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center top;
+  overflow: hidden;
+  transition: height 1s;
+  -webkit-transition: height 1s;
+  -moz-transition: height 1s;
+  -ms-transition: height 1s;
+  -o-transition: height 1s;
 }
 
 .headerInfo img {

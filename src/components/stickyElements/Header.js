@@ -9,9 +9,11 @@ import settingsLogo from "../../assets/images/settingsLogo.svg";
 export function Header() {
   const [navigationExtended, setNavigationExtended] = useState(false);
 
-  function updateNavigationExtended() {
+  function toggleNavigationExtended() {
     setNavigationExtended(!navigationExtended);
   }
+
+  const [showViewLogo, setShowViewLogo] = useState(false);
 
   return (
     <div className="pageTop">
@@ -24,7 +26,7 @@ export function Header() {
         />
         <h1 className="coolTitle">Productrevity</h1>
         <RoundLogo
-          onClick={updateNavigationExtended}
+          onClick={toggleNavigationExtended}
 
           logoImage={settingsLogo}
           height="50px"
@@ -38,6 +40,7 @@ export function Header() {
       </header>
       <HeaderInfo
         infoText="Test"
+        viewLogoExtended={showViewLogo}
       />
     </div>
   );
