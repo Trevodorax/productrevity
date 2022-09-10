@@ -13,7 +13,7 @@ export function Header() {
     setNavigationExtended(!navigationExtended);
   }
 
-  const [showViewLogo, setShowViewLogo] = useState(false);
+  const [showViewLogo, setShowViewLogo] = useState(true);
 
   return (
     <div className="pageTop">
