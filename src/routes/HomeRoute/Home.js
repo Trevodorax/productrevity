@@ -1,5 +1,5 @@
 import "./Home.css";
-import { HomeSection } from "./HomeSection";
+import { HomeSection } from "./components/HomeSection";
 
 export function Home(props) {
   return (
