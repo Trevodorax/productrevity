@@ -14,7 +14,7 @@ const UnconnectedNbListsControl = (props) => {
 
 const mapStateToProps = state => {
     return {
-        count: state
+        count: state.count
     };
 };
 
