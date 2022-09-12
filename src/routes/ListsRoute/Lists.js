@@ -1,9 +1,9 @@
-import { NbListsControls } from "./NbListsControls";
+import { ListsView } from "./listsView";
 
 export function Lists(props) {
   return (
     <main>
-      <NbListsControls />
+      <ListsView />
     </main>
   );
 }
