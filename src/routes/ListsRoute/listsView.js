@@ -1,21 +1,17 @@
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
+import { ListItem } from "./ListItem";
+
 export const ListsView = (props) => {
 
     const dispatch = useDispatch();
 
-    const [deletedIndex, setDeletedIndex] = useState('');
-
-    const handleDeleteInputChange = (event) => {
-        setDeletedIndex(event.target.value);
-    }
-
-    const removeList = () => {
+    const removeList = (listId) => {
         const action = {
             type: 'lists/removeList',
             payload: {
-                listId: deletedIndex,
+                listId: listId,
                 parentListId: 0,
             }
         }
@@ -37,13 +33,35 @@ export const ListsView = (props) => {
 
 
     
+    const listIds = useSelector(state => state.listIds);
+    let listIdsLeft = listIds.slice();
+    const listsById = useSelector(state => state.listsById);
+
+    function recursiveGetLists(listIds) {
+        listIds.filter(listId => listIdsLeft.includes(listId));
+        return listIds.map((listId) => {
+            if(!listIdsLeft.includes(listId)) {
+                return;
+            }
+            const currentList = listsById[listId];
+            listIdsLeft = listIdsLeft.filter(id => id != listId);
+
+            return (
+                <ListItem 
+                    key={listId}
+                    nesting={currentList.nesting}
+                    title={currentList.title}
+                    removeList={() => removeList(listId)}
+                    recursiveGetLists={recursiveGetLists}
+                    children={currentList.children}
+                />
+            );
+        })
+    }
 
     return (
         <>
-            <pre>{useSelector(state => JSON.stringify(state, null, 4))}</pre>
-            <input value={deletedIndex} onChange={handleDeleteInputChange} />
-            <button onClick={removeList}>-</button>
-            <button onClick={addTestList}>+</button>
+            {recursiveGetLists(listIds)}
         </>
     )
 }

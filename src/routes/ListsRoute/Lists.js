@@ -1,4 +1,4 @@
-import { ListsView } from "./listsView";
+import { ListsView } from "./ListsView";
 
 export function Lists(props) {
   return (

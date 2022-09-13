@@ -23,10 +23,10 @@ const initialListsState = {
             status: 'done',
             title: 'List 3',
             parent: 0,
-            chilren: [],
+            children: [],
         },
     },
-}
+};
 
 //  actions :
 //    lists/addList
@@ -79,6 +79,7 @@ export const ListsReducer = (state = initialListsState, action) => {
                     },
                 },
             };
+
         default :
             return state;
     };
@@ -105,7 +106,5 @@ function calculateNewId(existingIds) {
 }
 
 function getNesting(listsById, parentListId) {
-    console.log(parentListId);
-    console.log(listsById[parentListId]);
     return listsById[parentListId].nesting + 1;
 }
