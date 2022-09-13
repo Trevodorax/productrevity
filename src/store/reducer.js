@@ -1,5 +1,5 @@
 const initialListsState = {
-    listIds: [0, 1, 2],
+    listIds: [0],
     listsById: {
         0: {
             id: 0,
@@ -7,22 +7,6 @@ const initialListsState = {
             status: 'todo',
             title: 'List 1',
             parent: null,
-            children: [1, 2],
-        },
-        1: {
-            id: 1,
-            nesting: 1,
-            status: 'doing',
-            title: 'List 2',
-            parent: 0,
-            children: [],
-        },
-        2: {
-            id: 2,
-            nesting: 1,
-            status: 'done',
-            title: 'List 3',
-            parent: 0,
             children: [],
         },
     },
@@ -50,7 +34,7 @@ export const ListsReducer = (state = initialListsState, action) => {
                     [newListId]: {
                         id: newListId,
                         nesting: getNesting(state.listsById, parentListId),
-                        status: 'todo',
+                        isChecked: false,
                         parent: parentListId,
                         title: action.payload.listTitle,
                         children: [],
@@ -65,12 +49,24 @@ export const ListsReducer = (state = initialListsState, action) => {
         case 'lists/removeList' :
             // payload: listId, parentListId
 
+            if(action.payload.listId == 0) {
+                return state;
+            }
+
+            const idsToDelete = getIdsToDelete(state, [action.payload.listId]);
+
             // creating a copy of the original listsById without the attribute "action.payload.listId"
-            const {[action.payload.listId]: removedList, ...newListsById} = state.listsById
+            const newListsById = Object.values(state.listsById).reduce((acc, list) => {
+                if (idsToDelete.includes(list.id)) {
+                    return acc;
+                }
+
+                return {...acc, [list.id]: list}
+            }, {})
 
             return {
                 ...state,
-                listIds: state.listIds.filter(listId => listId != action.payload.listId),
+                listIds: state.listIds.filter(listId => !idsToDelete.includes(listId)),
                 listsById: {
                     ...newListsById,
                     [action.payload.parentListId]: {
@@ -85,16 +81,27 @@ export const ListsReducer = (state = initialListsState, action) => {
     };
 };
 
+function getIdsToDelete (state, ids = []) {
+
+    const newIdsToDelete = ids.reduce((acc, id) => {
+  
+      if (state.listsById[id]?.children?.length) {
+        return [...acc, id, ...getIdsToDelete(state, state.listsById[id]?.children)]
+      }
+  
+      return [...acc, id]
+  
+    }, [])
+  
+    return newIdsToDelete; 
+  
+  }
 
 function calculateNewId(existingIds) {
     let newId = null;
 
     // sort array for comparison
     existingIds.sort();
-
-    if(existingIds[0] != 0) {
-        return 0;
-    }
 
     for(let i = 0; i < existingIds.length - 1; i++) {
         if(existingIds[i + 1] != existingIds[i] + 1) {
