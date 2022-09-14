@@ -5,9 +5,10 @@ const initialListsState = {
             id: 0,
             nesting: 0,
             status: 'todo',
-            title: 'List 1',
+            title: 'Mes todo lists',
             parent: null,
             children: [],
+            isChecked: false
         },
     },
 };
@@ -53,7 +54,7 @@ export const ListsReducer = (state = initialListsState, action) => {
                 return state;
             }
 
-            const idsToDelete = getIdsToDelete(state, [action.payload.listId]);
+            const idsToDelete = getRecursiveIds(state, [action.payload.listId]);
 
             // creating a copy of the original listsById without the attribute "action.payload.listId"
             const newListsById = Object.values(state.listsById).reduce((acc, list) => {
@@ -76,24 +77,54 @@ export const ListsReducer = (state = initialListsState, action) => {
                 },
             };
 
+        case 'lists/toggleCheck' :
+            //payload: listId
+
+            const listId = action.payload.listId;
+            const currentCheckStatus = state.listsById[listId].isChecked;
+
+            const idsToCheck = getRecursiveIds(state, [listId])
+            idsToCheck.unshift(0);
+
+            const modifiedLists = idsToCheck.reduce((acc, idToCheck) => {
+
+                console.log(acc)
+                
+                return {
+                    ...acc,
+                    [idToCheck]: {
+                        ...state.listsById[idToCheck],
+                        isChecked: !currentCheckStatus,
+                    },
+                };
+            });
+
+            return {
+                ...state,
+                listsById: {
+                    ...state.listsById,
+                    ...modifiedLists,
+                },
+            };
+
         default :
             return state;
     };
 };
 
-function getIdsToDelete (state, ids = []) {
+function getRecursiveIds (state, ids = []) {
 
-    const newIdsToDelete = ids.reduce((acc, id) => {
+    const recursiveIds = ids.reduce((acc, id) => {
   
       if (state.listsById[id]?.children?.length) {
-        return [...acc, id, ...getIdsToDelete(state, state.listsById[id]?.children)]
+        return [...acc, id, ...getRecursiveIds(state, state.listsById[id]?.children)]
       }
   
       return [...acc, id]
   
     }, [])
   
-    return newIdsToDelete; 
+    return recursiveIds; 
   
   }
 
