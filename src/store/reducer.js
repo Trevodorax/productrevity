@@ -87,8 +87,6 @@ export const ListsReducer = (state = initialListsState, action) => {
             idsToCheck.unshift(0);
 
             const modifiedLists = idsToCheck.reduce((acc, idToCheck) => {
-
-                console.log(acc)
                 
                 return {
                     ...acc,

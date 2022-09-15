@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
+import styles from "./NewListForm.module.scss";
 
 export const NewListForm = (props) => {
 
@@ -25,7 +26,7 @@ export const NewListForm = (props) => {
 
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form className={styles.NewListForm} onSubmit={handleSubmit}>
             <input value={newListTitle} onChange={(event) => setNewListTitle(event.target.value)} />
         </form>
     )

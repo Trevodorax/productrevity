@@ -1,10 +1,11 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useState } from "react";
-import { NewListForm } from "./NewListForm";
-import { ListItems } from "./ListItems";
-import { ListTitle } from "./ListTitle";
+import { NewListForm } from "../ListTitle/NewListForm/NewListForm";
+import { ListItems } from "../ListItems";
+import { ListTitle } from "../ListTitle/ListTitle";
+import { ListCheckBox } from "../ListCheckBox/ListCheckBox";
 
-import "./ListItem.scss";
+import styles from "./ListItem.module.scss";
 
 export const ListItem = (props) => {
     const dispatch = useDispatch();
@@ -68,16 +69,16 @@ export const ListItem = (props) => {
                 nesting={props.nesting + 1}
             />
         </div>
-    )
-
-    const conditionalListItemContent = extended ? listItemContent : "";
-
+    );
     
 
     return (
-        <div className="listItem" nesting={props.nesting} style={listItemStyle} key={props.listId}>
-            <ListTitle 
+        <div className={styles.listItem} nesting={props.nesting} style={listItemStyle} key={props.listId}>
+            <ListCheckBox 
                 isChecked={isChecked}
+                listId={props.listId}
+            />
+            <ListTitle 
                 toggleCheck={toggleCheck}
                 title={currentList.title}
                 removeList={removeList}
@@ -86,7 +87,7 @@ export const ListItem = (props) => {
                 parentListId={props.parentListId}
                 extended={extended}
             />
-            {conditionalListItemContent}
+            {extended ? listItemContent : ""}
             
         </div>
     )
