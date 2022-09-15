@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { DndContext, useDndMonitor } from "@dnd-kit/core";
 import { useSelector, useDispatch } from "react-redux";
 import { ListItems } from "./ListItems";
 
@@ -6,24 +6,18 @@ export const ListsView = (props) => {
 
     const dispatch = useDispatch();
 
-    const removeList = (listId) => {
-        const action = {
-            type: 'lists/removeList',
-            payload: {
-                listId: listId,
-                parentListId: 0,
-            }
-        }
-
-        dispatch(action);
+    function handleDragEnd(event) {
+        console.log(event);
     }
     
     const listIds = useSelector(state => state.listIds);
 
     return (
-        <ListItems 
-            listIds={listIds}
-            nesting={0}
-        />
-    )
-}
+        <DndContext onDragEnd={handleDragEnd}>
+            <ListItems 
+                listIds={listIds}
+                nesting={0}
+            />
+        </DndContext>
+    );
+};

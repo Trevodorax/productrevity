@@ -23,7 +23,7 @@ export const ListItem = (props) => {
     }
 
     const listContentStyle = {
-        height: extended ? "fit-content" : 0,
+        display: extended ? "block" : "none",
     }
 
     const currentList = listsById[props.listId];
@@ -56,6 +56,22 @@ export const ListItem = (props) => {
         dispatch(action);
     }
 
+    const listItemContent = (
+        <div className="listContent" style={listContentStyle}>
+                    
+            <NewListForm 
+                parentListId={props.listId}
+            />
+            <ListItems
+                parentListId={props.listId}
+                listIds={currentList.children}
+                nesting={props.nesting + 1}
+            />
+        </div>
+    )
+
+    const conditionalListItemContent = extended ? listItemContent : "";
+
     
 
     return (
@@ -70,19 +86,8 @@ export const ListItem = (props) => {
                 parentListId={props.parentListId}
                 extended={extended}
             />
-            <div className="listContent" style={listContentStyle}>
-                
-                <NewListForm 
-                    parentListId={props.listId}
-                />
-                <ListItems
-                    parentListId={props.listId}
-                    listIds={currentList.children}
-                    nesting={props.nesting + 1}
-                />
-            </div>
+            {conditionalListItemContent}
             
         </div>
     )
 }
-

@@ -4,7 +4,7 @@ import { useLocation } from "react-router-dom";
 
 export function HeaderInfo(props) {
   const viewLogoStyle = {
-    height: props.viewLogoExtended ? 32 : 0
+    height: props.viewLogoExtended ? 32 : 0,
   }
 
   const path = useLocation().pathname;
@@ -17,5 +17,5 @@ export function HeaderInfo(props) {
         <img src={viewLogo} alt="view logo" />
       </a>
     </div>
-  )
-}
+  );
+};
