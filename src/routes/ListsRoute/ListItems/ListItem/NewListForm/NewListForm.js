@@ -8,9 +8,7 @@ export const NewListForm = (props) => {
 
     const [newListTitle, setNewListTitle] = useState('');
 
-    function handleSubmit(event) {
-        event.preventDefault();
-        
+    function createNewList () {
         const action = {
             type: 'lists/addList',
             payload: {
@@ -24,10 +22,25 @@ export const NewListForm = (props) => {
         setNewListTitle('');
     }
 
+    const nestedPadding = {
+        paddingLeft: `${props.nesting * 32 + 32}px`,
+    }
+
+    function handleKeyDown(event) {
+        if(event.code == "Enter") {
+            createNewList();
+        }
+    }
+
 
     return (
-        <form className={styles.NewListForm} onSubmit={handleSubmit}>
-            <input value={newListTitle} onChange={(event) => setNewListTitle(event.target.value)} />
-        </form>
+        <input 
+            onKeyDown={handleKeyDown} 
+            className={styles.NewListForm} 
+            style={nestedPadding} 
+            value={newListTitle} 
+            onChange={(event) => setNewListTitle(event.target.value)} 
+            placeholder="Add new item"
+        />
     )
 }
