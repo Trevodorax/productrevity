@@ -1,8 +1,16 @@
+import { createAction, createReducer } from "@reduxjs/toolkit";
+
+
+
+const addList = createAction('lists/addList');
+const removeList = createAction('lists/removeList');
+const toggleCheck = createAction('lists/toggleCheck');
+
 const initialListsState = {
-    listIds: [0],
+    listIds: ['0'],
     listsById: {
-        0: {
-            id: 0,
+        '0': {
+            id: '0',
             nesting: 0,
             status: 'todo',
             title: 'Mes todo lists',
@@ -13,102 +21,64 @@ const initialListsState = {
     },
 };
 
-//  actions :
-//    lists/addList
-//    lists/removeList
-//    lists/changeListStatus
-//    lists/modifyListTitle
-
-export const ListsReducer = (state = initialListsState, action) => {
-    switch(action.type) {
-        case 'lists/addList' :
+export const ListsReducer = createReducer(initialListsState, (builder) => {
+    builder
+        .addCase(addList, (state, action) => {
             // payload : listTitle, parentListId
 
+            // adding the new list to the ids list
             const newListId = calculateNewId(state.listIds);
-            const parentListId = action.payload.parentListId;
+            state.listIds.push(newListId);
 
-            return {
-                ...state,
-                listIds: state.listIds.concat(newListId),
-                listsById: {
-                    ...state.listsById,
-                    [newListId]: {
-                        id: newListId,
-                        nesting: getNesting(state.listsById, parentListId),
-                        isChecked: false,
-                        parent: parentListId,
-                        title: action.payload.listTitle,
-                        children: [],
-                    },
-                    [parentListId]: {
-                        ...state.listsById[parentListId],
-                        children: state.listsById[parentListId].children.concat(newListId),
-                    },
-                },
-            };
-
-        case 'lists/removeList' :
-            // payload: listId, parentListId
-
-            if(action.payload.listId == 0) {
-                return state;
+            // adding the new list to the lists
+            const newList = {
+                id: newListId,
+                nesting: getNesting(state.listsById, action.payload.parentListId),
+                isChecked: false,
+                parent: action.payload.parentListId,
+                title: action.payload.listTitle,
+                children: [],
             }
+            state.listsById[newListId] = newList;
+
+            // updating parent children array
+            state.listsById[action.payload.parentListId].children.push(newListId);
+        })
+        .addCase(removeList, (state, action) => {
+            // payload : listId
 
             const idsToDelete = getRecursiveIds(state, [action.payload.listId]);
 
-            // creating a copy of the original listsById without the attribute "action.payload.listId"
-            const newListsById = Object.values(state.listsById).reduce((acc, list) => {
-                if (idsToDelete.includes(list.id)) {
-                    return acc;
+            // removing the id from parent's children list
+            const parentId = state.listsById[action.payload.listId].parent;
+            const deletedChildIndex = state.listsById[parentId].children.indexOf(action.payload.listId);
+            if(deletedChildIndex !== -1) {
+                state.listsById[parentId].children.splice(deletedChildIndex, 1);
+            }
+
+            idsToDelete.forEach(idToDelete => {
+                // deleting list from the lists object (key and value)
+                delete state.listsById[idToDelete];
+                // deleting it from the array of ids
+                const deletedListIndex = state.listIds.indexOf(idToDelete);
+                if(deletedListIndex !== -1) {
+                    state.listIds.splice(deletedListIndex, 1);
                 }
-
-                return {...acc, [list.id]: list}
-            }, {})
-
-            return {
-                ...state,
-                listIds: state.listIds.filter(listId => !idsToDelete.includes(listId)),
-                listsById: {
-                    ...newListsById,
-                    [action.payload.parentListId]: {
-                        ...state.listsById[action.payload.parentListId],
-                        children: state.listsById[action.payload.parentListId].children.filter(id => id != action.payload.listId),
-                    },
-                },
-            };
-
-        case 'lists/toggleCheck' :
-            //payload: listId
-
-            const listId = action.payload.listId;
-            const currentCheckStatus = state.listsById[listId].isChecked;
-
-            const idsToCheck = getRecursiveIds(state, [listId])
-            idsToCheck.unshift(0);
-
-            const modifiedLists = idsToCheck.reduce((acc, idToCheck) => {
                 
-                return {
-                    ...acc,
-                    [idToCheck]: {
-                        ...state.listsById[idToCheck],
-                        isChecked: !currentCheckStatus,
-                    },
-                };
             });
+        })
+        .addCase(toggleCheck, (state, action) => {
+            // payload : listId
 
-            return {
-                ...state,
-                listsById: {
-                    ...state.listsById,
-                    ...modifiedLists,
-                },
-            };
+            const listsToCheck = getRecursiveIds(state, [action.payload.listId]);
+            const previousCheckStatus = state.listsById[action.payload.listId].isChecked;
 
-        default :
-            return state;
-    };
-};
+            listsToCheck.forEach(idToCheck => {
+                state.listsById[idToCheck].isChecked = !previousCheckStatus;
+            });
+        })
+})
+
 
 function getRecursiveIds (state, ids = []) {
 
@@ -133,12 +103,12 @@ function calculateNewId(existingIds) {
     existingIds.sort();
 
     for(let i = 0; i < existingIds.length - 1; i++) {
-        if(existingIds[i + 1] != existingIds[i] + 1) {
-            return existingIds[i] + 1
+        if(parseInt(existingIds[i + 1]) != parseInt(existingIds[i]) + 1) {
+            return (existingIds[i] + 1).toString();
         }
     }
 
-    return existingIds.length;
+    return (existingIds.length).toString();;
 }
 
 function getNesting(listsById, parentListId) {
