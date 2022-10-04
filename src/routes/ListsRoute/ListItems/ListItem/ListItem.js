@@ -8,6 +8,9 @@ import { DeleteButton } from "./DeleteButton/DeleteButton";
 import { ToggleButton } from "./ToggleButton/ToggleButton"
 
 import styles from "./ListItem.module.scss";
+import { useDraggable } from "@dnd-kit/core";
+import { CSS } from "@dnd-kit/utilities";
+import { DropZone } from "./DropZone/DropZone";
 
 export const ListItem = (props) => {
 
@@ -19,13 +22,19 @@ export const ListItem = (props) => {
     const listsById = useSelector(state => state.listsById);
     const isChecked = useSelector(state => state.listsById[props.listId].isChecked);
 
+    const {attributes, listeners, setNodeRef, transform} = useDraggable({
+        id: `drag${props.listId}`,
+    });
+
+    const style = {
+        transform: CSS.Translate.toString(transform),
+    };
+
     const currentList = listsById[props.listId];
 
     if(props.nesting != currentList.nesting) {
         return;
     }
-
-   
 
     const listItemStyle = {
         marginRight: `${props.nesting * 32 + 8}px`,
@@ -53,11 +62,16 @@ export const ListItem = (props) => {
                 className={styles.listItem} 
                 nesting={props.nesting} 
                 key={props.listId}
+                ref={setNodeRef}
+                style={style}
+
                 onMouseEnter={() => {setItemHover(true)}}
                 onMouseLeave={() => {setItemHover(false)}}
             >
                 <DragHandle
                     style={listItemStyle}
+                    dragAttributes={attributes}
+                    dragListeners={listeners}
                 />
                 <ListCheckBox
                     isChecked={isChecked}
@@ -74,7 +88,11 @@ export const ListItem = (props) => {
                     setExtended={setExtended}
                     itemHover={itemHover}
                 />
+                
             </div>
+            <DropZone
+                listId={props.listId}
+            />
             {extended ? listItemContent : ""}
         </>
     )
