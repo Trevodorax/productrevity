@@ -43,11 +43,16 @@ export const ListItem = (props) => {
     const listItemContent = (
                     
         <>
-            <ListItems
-                parentListId={props.listId}
-                listIds={currentList.children}
-                nesting={props.nesting + 1}
-            />
+            {currentList.children.map(listId => {
+            return (
+                <ListItem 
+                    key={listId}
+                    listId={listId}
+                    nesting={props.nesting + 1}
+                    parentListId={props.listId}
+                />
+            )
+            })}
             <NewListForm
                 parentListId={props.listId}
                 nesting={props.nesting}

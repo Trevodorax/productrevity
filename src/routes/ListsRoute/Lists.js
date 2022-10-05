@@ -1,6 +1,7 @@
 import { closestCenter, DndContext } from "@dnd-kit/core";
 import { useSelector } from "react-redux";
 import { ListItems } from "./ListItems/ListItems";
+import { ListItem } from "./ListItems/ListItem/ListItem";
 import styles from "./Lists.module.scss";
 
 export function Lists(props) {
@@ -14,10 +15,10 @@ export function Lists(props) {
   return (
     <main>
       <DndContext onDragOver={handleDragOver} collisionDetection={closestCenter}>
-        <ListItems 
-          className={styles.ListItems}
-            listIds={listIds}
+        <ListItem 
+            listId={listIds[0]}
             nesting={0}
+            parentListId={null}
         />
       </DndContext>
     </main>
