@@ -16,7 +16,7 @@ const initialListsState = {
             title: 'Mes todo lists',
             parent: null,
             children: [],
-            isChecked: false
+            isChecked: false,
         },
     },
 };
