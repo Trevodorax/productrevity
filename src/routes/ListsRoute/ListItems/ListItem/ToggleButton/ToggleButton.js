@@ -1,10 +1,19 @@
 import styles from "./ToggleButton.module.scss";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
+import { useDispatch } from "react-redux";
 
-export const ToggleButton = ({extended, setExtended}) => {
+export const ToggleButton = ({extended, listId}) => {
+    const dispatch = useDispatch();
+
     function toggleExtended() {
-        setExtended(!extended);
+        const action = {
+            type: 'lists/toggleOpen',
+            payload : {
+                listId: listId,
+            },
+        };
+        dispatch(action);
     };
 
     return (

@@ -15,18 +15,17 @@ export const ListItem = (props) => {
 
     const [itemHover, setItemHover] = useState(false);
 
-    const [extended, setExtended] = useState(false);
-
-
     const listsById = useSelector(state => state.listsById);
     const isChecked = useSelector(state => state.listsById[props.listId].isChecked);
+    const isOpen = useSelector(state => state.listsById[props.listId].isOpen);
 
-    const {attributes, listeners, setNodeRef, transform} = useDraggable({
+    const {attributes, listeners, setNodeRef, transform, isDragging} = useDraggable({
         id: `${props.listId}`,
     });
 
     const style = {
         transform: CSS.Translate.toString(transform),
+        border: isDragging ? '2px #7858A6 dashed' : '0',
     };
 
     const currentList = listsById[props.listId];
@@ -86,16 +85,16 @@ export const ListItem = (props) => {
                     itemHover={itemHover}
                 />
                 <ToggleButton 
-                    extended={extended}
-                    setExtended={setExtended}
+                    extended={isOpen}
                     itemHover={itemHover}
+                    listId={props.listId}
                 />
                 
             </div>
             <DropZone
                 listId={props.listId}
             />
-            {extended ? listItemContent : ""}
+            {isOpen && !isDragging ? listItemContent : ""}
         </>
     )
 }

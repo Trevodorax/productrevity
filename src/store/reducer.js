@@ -3,7 +3,9 @@ import { createAction, createReducer } from "@reduxjs/toolkit";
 const addList = createAction('lists/addList');
 const removeList = createAction('lists/removeList');
 const toggleCheck = createAction('lists/toggleCheck');
+const toggleOpen = createAction('lists/toggleOpen');
 const moveList = createAction('lists/moveList');
+
 
 const initialListsState = {
     listIds: ['0'],
@@ -15,6 +17,7 @@ const initialListsState = {
             parent: null,
             children: [],
             isChecked: false,
+            isOpen: false,
         },
     },
 };
@@ -74,6 +77,11 @@ export const ListsReducer = createReducer(initialListsState, (builder) => {
                 state.listsById[idToCheck].isChecked = !previousCheckStatus;
             });
         })
+        .addCase(toggleOpen, (state, action) => {
+            // payload: listId
+
+            state.listsById[action.payload.listId].isOpen = (!state.listsById[action.payload.listId].isOpen);
+        })
         .addCase(moveList, (state, action) => {
             // payload : from, to
 
@@ -85,6 +93,40 @@ export const ListsReducer = createReducer(initialListsState, (builder) => {
 
             // stop if "to" id is part of the impossible list
             if(recursiveIds.includes(to)) {
+                return;
+            }
+
+            // if "from" and "to" are brothers and "to" is closed, just put "from" after "to" in their parent's children list
+            if(state.listsById[from].parent === state.listsById[to].parent && !state.listsById[to].isOpen) {
+                const parentListId = state.listsById[from].parent;
+
+                // removing the old index in this children list
+                const deletedChildIndex = state.listsById[parentListId].children.indexOf(from);
+                if(deletedChildIndex !== -1) {
+                    state.listsById[parentListId].children.splice(deletedChildIndex, 1);
+                }
+
+                // get the new index to move "from" to
+                const newIndex = state.listsById[parentListId].children.indexOf(to);
+
+                // adding it after this index
+                state.listsById[parentListId].children.splice(newIndex + 1, 0, from);
+                return;
+            }
+
+            // if "to" is "from"'s parent, just put "from" to the first index of the parent's children list
+            if(state.listsById[from].parent === to) {
+                const parentListId = state.listsById[from].parent;
+
+                // removing the old index in this children list
+                const deletedChildIndex = state.listsById[parentListId].children.indexOf(from);
+                if(deletedChildIndex !== -1) {
+                    state.listsById[parentListId].children.splice(deletedChildIndex, 1);
+                }
+
+                // adding this id to the beginning of parent's children array
+                state.listsById[parentListId].children.unshift(from);
+                
                 return;
             }
 
