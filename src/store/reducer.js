@@ -1,17 +1,15 @@
 import { createAction, createReducer } from "@reduxjs/toolkit";
 
-
-
 const addList = createAction('lists/addList');
 const removeList = createAction('lists/removeList');
 const toggleCheck = createAction('lists/toggleCheck');
+const moveList = createAction('lists/moveList');
 
 const initialListsState = {
     listIds: ['0'],
     listsById: {
         '0': {
             id: '0',
-            nesting: 0,
             status: 'todo',
             title: 'Mes todo lists',
             parent: null,
@@ -33,7 +31,6 @@ export const ListsReducer = createReducer(initialListsState, (builder) => {
             // adding the new list to the lists
             const newList = {
                 id: newListId,
-                nesting: getNesting(state.listsById, action.payload.parentListId),
                 isChecked: false,
                 parent: action.payload.parentListId,
                 title: action.payload.listTitle,
@@ -77,6 +74,34 @@ export const ListsReducer = createReducer(initialListsState, (builder) => {
                 state.listsById[idToCheck].isChecked = !previousCheckStatus;
             });
         })
+        .addCase(moveList, (state, action) => {
+            // payload : from, to
+
+            const from = action.payload.from;
+            const to = action.payload.to;
+
+            // get all lists where the "from" list can't be moved (itself and its children)
+            const recursiveIds = getRecursiveIds(state, [from]);
+
+            // stop if "to" id is part of the impossible list
+            if(recursiveIds.includes(to)) {
+                return;
+            }
+
+            // removing element from the previous parent's children list
+            const prevParent = state.listsById[from].parent;
+            const deletedChildIndex = state.listsById[prevParent].children.indexOf(from);
+            if(deletedChildIndex !== -1) {
+                state.listsById[prevParent].children.splice(deletedChildIndex, 1);
+            }
+
+            // adding element to the new parent's children list
+            state.listsById[to].children.push(from);
+
+            // change the moved list's parent to the new list id
+            state.listsById[from].parent = to;
+
+        })
 })
 
 
@@ -109,8 +134,4 @@ function calculateNewId(existingIds) {
     }
 
     return (existingIds.length).toString();;
-}
-
-function getNesting(listsById, parentListId) {
-    return listsById[parentListId].nesting + 1;
 }

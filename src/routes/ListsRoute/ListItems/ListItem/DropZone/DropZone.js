@@ -3,10 +3,10 @@ import style from "./DropZone.module.scss";
 
 export const DropZone = ({listId}) => {
 
-    const {setNodeRef, isOver} = useDroppable({id: `drop${listId}`});
+    const {setNodeRef, isOver} = useDroppable({id: `${listId}`});
 
     const dropStyle = {
-        height: isOver ? "5px" : "0px",
+        height: isOver ? "2px" : "0px",
     }
 
     return(

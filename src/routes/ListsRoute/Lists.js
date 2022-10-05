@@ -1,5 +1,5 @@
 import { closestCenter, DndContext } from "@dnd-kit/core";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ListItem } from "./ListItems/ListItem/ListItem";
 import styles from "./Lists.module.scss";
 
@@ -7,8 +7,18 @@ export function Lists(props) {
 
   const listIds = useSelector(state => state.listIds);
 
+  const dispatch = useDispatch()
+
   function handleDragEnd(event) {
-    console.log(event)
+    const action = {
+      type: 'lists/moveList',
+      payload: {
+        from: event.active.id,
+        to: event.over.id,
+      },
+    };
+
+    dispatch(action);
   }
 
   return (

@@ -22,7 +22,7 @@ export const ListItem = (props) => {
     const isChecked = useSelector(state => state.listsById[props.listId].isChecked);
 
     const {attributes, listeners, setNodeRef, transform} = useDraggable({
-        id: `drag${props.listId}`,
+        id: `${props.listId}`,
     });
 
     const style = {
@@ -31,9 +31,7 @@ export const ListItem = (props) => {
 
     const currentList = listsById[props.listId];
 
-    if(props.nesting != currentList.nesting) {
-        return;
-    }
+    
 
     const listItemStyle = {
         marginRight: `${props.nesting * 32 + 8}px`,
