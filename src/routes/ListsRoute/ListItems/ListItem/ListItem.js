@@ -1,7 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useState } from "react";
 import { NewListForm } from "./NewListForm/NewListForm";
-import { ListItems } from "../ListItems";
 import { ListCheckBox } from "./ListCheckBox/ListCheckBox";
 import { DragHandle } from "./DragHandle/DragHandle";
 import { DeleteButton } from "./DeleteButton/DeleteButton";
